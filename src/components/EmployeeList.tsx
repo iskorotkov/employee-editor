@@ -5,12 +5,12 @@ export function EmployeeList (props: {
   employees: Employee[]
 }) {
   return (
-    <Table hover responsive>
-      <thead className='shadow'>
+    <Table hover responsive borderless>
+      <thead className="shadow">
       <tr>
-        <th>Second name</th>
         <th>First name</th>
         <th>Middle name</th>
+        <th>Second name</th>
         <th>Position</th>
         <th>Birthday</th>
         <th>Gender</th>
@@ -24,9 +24,9 @@ export function EmployeeList (props: {
       {props.employees.map(e => {
         return (
           <tr key={e.ID}>
-            <td>{e.SecondName}</td>
             <td>{e.FirstName}</td>
             <td>{e.MiddleName ?? '-'}</td>
+            <td>{e.SecondName}</td>
             <td>{e.Position}</td>
             <td>{e.Birthday.toLocaleDateString()}</td>
             <td>{e.Gender}</td>
