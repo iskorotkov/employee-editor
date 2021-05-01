@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './App.css'
-import 'bootstrap/dist/css/bootstrap.min.css'
 import { EmployeeList } from './components/EmployeeList'
 import { Employee, Gender } from './data/employee'
 import Button from 'react-bootstrap/Button'
+import { EmployeeForm } from './components/EmployeeForm'
+import Modal from 'react-bootstrap/Modal'
 
 function App () {
   const employees: Employee[] = [
@@ -35,17 +36,34 @@ function App () {
     }
   ]
 
+  const [show, setShow] = useState(false)
+
+  const handleShow = () => setShow(true)
+  const handleClose = () => setShow(false)
+
   return (
     <div className="App">
       <header className="w-100 p-0 m-0 bg-primary">
         <div className="d-flex flex-row flex-nowrap mx-2 p-3 align-items-center">
           <h2 className="text-white p-0 m-0">Employee Editor</h2>
           <span className="flex-grow-1"/>
-          <Button variant="success">Add new employee</Button>
+          <Button variant="success" onClick={handleShow}>Add new employee</Button>
         </div>
       </header>
       <main>
         <EmployeeList employees={employees}/>
+        <Modal show={show} onHide={handleClose}>
+          <Modal.Header>
+            <Modal.Title className='px-3'>Add new employee</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <EmployeeForm positions={["Developer", "Accountant"]} others={employees}/>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>Close</Button>
+            <Button variant="primary" onClick={handleClose}>Save changes</Button>
+          </Modal.Footer>
+        </Modal>
       </main>
     </div>
   )
