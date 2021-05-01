@@ -3,20 +3,20 @@ export type ID = number
 export type Position = string
 
 export enum Gender {
-  Male,
-  Female
+  Male = 'male',
+  Female = 'female'
 }
 
 export interface Employee {
   ID: ID
   FirstName: string
   SecondName: string
-  MiddleName: string
+  MiddleName: string | null
   Position: Position
   Birthday: Date
   Gender: Gender
   EmploymentDate: Date
-  FiringDate: Date
+  FiringDate: Date | null
   HasDrivingLicense: boolean
   Colleagues: Employee[]
 }
