@@ -4,7 +4,6 @@ import { EmployeeList } from './components/EmployeeList'
 import { Employee, Gender } from './data/employee'
 import Button from 'react-bootstrap/Button'
 import { EmployeeForm } from './components/EmployeeForm'
-import Modal from 'react-bootstrap/Modal'
 
 function App () {
   const employees: Employee[] = [
@@ -52,18 +51,7 @@ function App () {
       </header>
       <main>
         <EmployeeList employees={employees}/>
-        <Modal show={show} onHide={handleClose}>
-          <Modal.Header>
-            <Modal.Title className='px-3'>Add new employee</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <EmployeeForm positions={["Developer", "Accountant"]} others={employees}/>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>Close</Button>
-            <Button variant="primary" onClick={handleClose}>Save changes</Button>
-          </Modal.Footer>
-        </Modal>
+        <EmployeeForm positions={[]} colleagues={employees} show={show} onHide={handleClose}/>
       </main>
     </div>
   )
