@@ -7,23 +7,6 @@ import Container from 'react-bootstrap/Container'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 
-const FloatingInput = (props: {
-  id: string
-  type: string
-  label: string
-  placeholder: string
-  defaultValue?: string | string[] | number
-  required?: boolean
-}) => {
-  return (
-    <div className="form-floating mb-2">
-      <Form.Control value={props.defaultValue} id={props.id} type={props.type}
-                    placeholder={props.placeholder} required={props.required}/>
-      <Form.Label htmlFor={props.id}>{props.label}</Form.Label>
-    </div>
-  )
-}
-
 export function EmployeeForm (props: {
   positions: Position[]
   colleagues: Employee[]
@@ -31,11 +14,25 @@ export function EmployeeForm (props: {
   hideForm: () => void
   employee?: Employee
 }) {
+  const FloatingInput = (props: {
+    id: string
+    label: string
+    [values: string]: any
+  }) => {
+    return (
+      <div className="form-floating mb-2">
+        <Form.Control {...props}/>
+        <Form.Label htmlFor={props.id}>{props.label}</Form.Label>
+      </div>
+    )
+  }
+
   const [validated, setValidated] = useState(false)
+  const [employmentDate, setEmploymentDate] = useState('')
+  const [firingDate, setFiringDate] = useState('')
 
   const handleSubmit = (event: FormEvent) => {
-    const form = event.currentTarget
-    // @ts-ignore
+    const form = event.currentTarget as unknown as { checkValidity: () => boolean }
     if (form.checkValidity()) {
       props.hideForm()
     } else {
@@ -44,6 +41,16 @@ export function EmployeeForm (props: {
     }
 
     setValidated(true)
+  }
+
+  const handleEmploymentDateChange = (event: InputEvent) => {
+    const input = event.target as HTMLInputElement
+    setEmploymentDate(input.value)
+  }
+
+  const handleFiringDateChange = (event: InputEvent) => {
+    const input = event.target as HTMLInputElement
+    setFiringDate(input.value)
   }
 
   return (
@@ -85,9 +92,11 @@ export function EmployeeForm (props: {
 
           <Form.Label className="mt-3">Employment</Form.Label>
           <FloatingInput id="position" type="text" label="Position" placeholder="Developer" required/>
-          <FloatingInput id="employment-date" type="date" label="Employment date"
-                         placeholder={new Date().toDateString()} required/>
-          <FloatingInput id="firing-date" type="date" label="Firing date" placeholder={new Date().toDateString()}/>
+          <FloatingInput id="employment-date" type="date" label="Employment date" value={employmentDate} required
+                         placeholder={new Date().toDateString()} onChange={handleEmploymentDateChange}/>
+          <FloatingInput id="firing-date" type="date" label="Firing date" value={firingDate}
+                         placeholder={new Date().toDateString()} onChange={handleFiringDateChange}
+                         min={employmentDate}/>
         </Form>
       </Modal.Body>
       <Modal.Footer>
