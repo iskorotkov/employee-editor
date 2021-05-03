@@ -1,12 +1,13 @@
 import { Employee } from '../data/employee'
 import Table from 'react-bootstrap/Table'
+import React from 'react'
 
 export function EmployeeList (props: {
   employees: Employee[]
 }) {
   return (
-    <Table hover responsive borderless>
-      <thead className="shadow">
+    <Table hover responsive>
+      <thead className="align-middle">
       <tr>
         <th>First name</th>
         <th>Middle name</th>
@@ -20,7 +21,7 @@ export function EmployeeList (props: {
         <th>Colleagues</th>
       </tr>
       </thead>
-      <tbody>
+      <tbody className="align-middle">
       {props.employees.map(e => {
         return (
           <tr key={e.ID}>
