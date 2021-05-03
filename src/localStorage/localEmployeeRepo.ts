@@ -41,18 +41,20 @@ export class LocalEmployeeRepo implements EmployeeRepo {
 
     for (let i = 0; i <= lastID; i++) {
       const key = localStorage.key(i)
-      if (!key) {
-        console.log(`Couldn't read key ${i}`)
-        break
+      if (!key || isNaN(parseInt(key))) {
+        continue
       }
 
       const json = localStorage.getItem(key)
       if (!json) {
-        console.log(`Couldn't read data with key ${i}`)
-        break
+        continue
       }
 
       const data = JSON.parse(json)
+      if (!data) {
+        continue
+      }
+
       const employee = LocalEmployeeRepo.toEmployee(data)
       employees.push(employee)
     }
