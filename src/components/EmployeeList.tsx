@@ -24,17 +24,17 @@ export function EmployeeList (props: {
       <tbody className="align-middle">
       {props.employees.map(e => {
         return (
-          <tr key={e.ID}>
-            <td>{e.FirstName}</td>
-            <td>{e.MiddleName ?? '-'}</td>
-            <td>{e.SecondName}</td>
-            <td>{e.Position}</td>
-            <td>{e.Birthday.toLocaleDateString()}</td>
-            <td>{e.Gender}</td>
-            <td>{e.EmploymentDate.toLocaleDateString()}</td>
-            <td>{e.FiringDate?.toLocaleDateString() ?? '-'}</td>
-            <td>{e.HasDrivingLicense ? 'yes' : 'no'}</td>
-            <td>{e.Colleagues.length}</td>
+          <tr key={e.id}>
+            <td>{e.firstName}</td>
+            <td>{e.middleName ?? '-'}</td>
+            <td>{e.secondName}</td>
+            <td>{e.position}</td>
+            <td>{e.birthday.toLocaleDateString()}</td>
+            <td>{e.gender}</td>
+            <td>{e.employmentDate.toLocaleDateString()}</td>
+            <td>{e.firingDate?.toLocaleDateString() ?? '-'}</td>
+            <td>{e.hasDrivingLicense ? 'yes' : 'no'}</td>
+            <td>{e.colleagues.length}</td>
           </tr>
         )
       })}

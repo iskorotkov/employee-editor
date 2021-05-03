@@ -1,11 +1,21 @@
 import { Employee, EmployeeRepo } from '../data/employee'
 
+export const key = 'currentKey'
+
 export class LocalEmployeeRepo implements EmployeeRepo {
-  Add (e: Employee): void {
-    localStorage.setItem(e.ID.toString(), JSON.stringify(e))
+  private static nextID () {
+    const lastID = localStorage.getItem(key)
+    const newId = lastID ? parseInt(lastID) + 1 : 0
+    localStorage.setItem(key, newId.toString())
+    return newId
   }
 
-  List (): Employee[] {
+  add (e: Employee): void {
+    e.id = LocalEmployeeRepo.nextID()
+    localStorage.setItem(e.id.toString(), JSON.stringify(e))
+  }
+
+  list (): Employee[] {
     const employees = []
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i)!
@@ -17,11 +27,11 @@ export class LocalEmployeeRepo implements EmployeeRepo {
     return employees
   }
 
-  Remove (e: Employee): void {
-    localStorage.removeItem(e.ID.toString())
+  remove (e: Employee): void {
+    localStorage.removeItem(e.id.toString())
   }
 
-  Update (e: Employee): void {
-    localStorage.setItem(e.ID.toString(), JSON.stringify(e))
+  update (e: Employee): void {
+    localStorage.setItem(e.id.toString(), JSON.stringify(e))
   }
 }

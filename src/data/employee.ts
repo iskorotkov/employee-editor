@@ -3,31 +3,31 @@ export type ID = number
 export type Position = string
 
 export enum Gender {
-  Male = 'male',
-  Female = 'female'
+  male = 'male',
+  female = 'female'
 }
 
 export interface Employee {
-  ID: ID
-  FirstName: string
-  SecondName: string
-  MiddleName: string | null
-  Position: Position
-  Birthday: Date
-  Gender: Gender
-  EmploymentDate: Date
-  FiringDate: Date | null
-  HasDrivingLicense: boolean
-  Colleagues: Employee[]
+  id: ID
+  firstName: string
+  secondName: string
+  middleName: string | null
+  position: Position
+  birthday: Date
+  gender: Gender
+  employmentDate: Date
+  firingDate: Date | null
+  hasDrivingLicense: boolean
+  colleagues: Employee[]
 }
 
 export interface EmployeeRepo {
-  Add (e: Employee): void
+  add (e: Employee): void
 
-  Remove (e: Employee): void
+  remove (e: Employee): void
 
-  Update (e: Employee): void
+  update (e: Employee): void
 
-  List (): Employee[]
+  list (): Employee[]
 }
 
