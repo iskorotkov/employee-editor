@@ -6,18 +6,44 @@ import Col from 'react-bootstrap/Col'
 import Container from 'react-bootstrap/Container'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
+import { Floating } from './Floating'
+import AsyncCreatableSelect from 'react-select/async-creatable'
+import { OptionsType } from 'react-select'
 
-const FloatingInput = (props: {
-  id: string
-  label: string
-  [values: string]: any
+const loadOptions = async (filter: string) => {
+  const url = `https://api.hh.ru/vacancies?text="${filter}"`
+  const result = await fetch(url)
+  if (!result.ok) {
+    return []
+  }
+
+  const json = await result.json()
+  const names: string[] = json.items
+    .map((item: { name: string }) => item.name)
+
+  const unique: string[] = []
+  names.forEach(name => {
+    if (unique.indexOf(name) === -1) {
+      unique.push(name)
+    }
+  })
+
+  return unique.map(name => ({
+    value: name,
+    label: name
+  }))
+}
+
+const PositionsSelector = (props: {
+  onChange: (value: string) => void
 }) => {
-  return (
-    <div className="form-floating mb-2">
-      <Form.Control {...props}/>
-      <Form.Label htmlFor={props.id}>{props.label}</Form.Label>
-    </div>
-  )
+  const handleChange = (e: { value: string } | OptionsType<{ value: string }> | null) => {
+    if (e && 'value' in e) {
+      props.onChange(e.value)
+    }
+  }
+
+  return <AsyncCreatableSelect cacheOptions loadOptions={loadOptions} onChange={handleChange}/>
 }
 
 export function EmployeeForm (props: {
@@ -44,7 +70,8 @@ export function EmployeeForm (props: {
 
   const handleSubmit = (event: FormEvent) => {
     const form = event.currentTarget as unknown as { checkValidity: () => boolean }
-    if (form.checkValidity()) {
+
+    if (form.checkValidity() && position !== '') {
       const employee = {
         id: 0,
         firstName,
@@ -84,7 +111,6 @@ export function EmployeeForm (props: {
     setHasDrivingLicense(input.checked)
   }
 
-  const handlePosition = (e: ChangeEvent) => handleChange(e, setPosition)
   const handleEmploymentDateChange = (e: ChangeEvent) => handleChange(e, setEmploymentDate)
   const handleFiringDateChange = (e: ChangeEvent) => handleChange(e, setFiringDate)
 
@@ -96,14 +122,30 @@ export function EmployeeForm (props: {
       <Modal.Body>
         <Form id="employee-form" noValidate validated={validated} onSubmit={handleSubmit} onReset={props.hideForm}>
           <Form.Label>Personal info</Form.Label>
-          <FloatingInput id="first-name" type="text" label="First name" placeholder="Ivan" required
-                         value={firstName} onChange={handleFirstName}/>
-          <FloatingInput id="middle-name" type="text" label="Middle name" placeholder="Ivanovich"
-                         value={middleName} onChange={handleMiddleName}/>
-          <FloatingInput id="second-name" type="text" label="Second name" placeholder="Ivanov" required
-                         value={secondName} onChange={handleSecondName}/>
-          <FloatingInput id="birthday" type="date" label="Birthday" placeholder={new Date().toDateString()} required
-                         value={birthday} onChange={handleBirthday}/>
+
+          <Floating className="mb-2">
+            <Form.Control id="first-name" type="text" placeholder="Ivan" required
+                          value={firstName} onChange={handleFirstName}/>
+            <Form.Label htmlFor="first-name">First name</Form.Label>
+          </Floating>
+
+          <Floating className="mb-2">
+            <Form.Control id="middle-name" type="text" placeholder="Ivanovich"
+                          value={middleName} onChange={handleMiddleName}/>
+            <Form.Label htmlFor="middle-name">Middle name</Form.Label>
+          </Floating>
+
+          <Floating className="mb-2">
+            <Form.Control id="second-name" type="text" placeholder="Ivanov" required
+                          value={secondName} onChange={handleSecondName}/>
+            <Form.Label htmlFor="second-name">Second name</Form.Label>
+          </Floating>
+
+          <Floating className="mb-2">
+            <Form.Control id="birthday" type="date" placeholder={new Date().toDateString()} required
+                          value={birthday} onChange={handleBirthday}/>
+            <Form.Label htmlFor="birthday">Birthday</Form.Label>
+          </Floating>
 
           <Container fluid>
             <Row className="mt-3">
@@ -133,14 +175,22 @@ export function EmployeeForm (props: {
           </Container>
 
           <Form.Label className="mt-3">Employment</Form.Label>
-          <FloatingInput id="position" type="text" label="Position" placeholder="Developer" required
-                         value={position} onChange={handlePosition}/>
-          <FloatingInput id="employment-date" type="date" label="Employment date"
-                         placeholder={new Date().toDateString()} required
-                         value={employmentDate} onChange={handleEmploymentDateChange}/>
-          <FloatingInput id="firing-date" type="date" label="Firing date"
-                         placeholder={new Date().toDateString()} min={employmentDate}
-                         value={firingDate} onChange={handleFiringDateChange}/>
+
+          <Floating className="mb-2">
+            <PositionsSelector onChange={setPosition}/>
+          </Floating>
+
+          <Floating className="mb-2">
+            <Form.Control id="employment-date" type="date" placeholder={new Date().toDateString()} required
+                          value={employmentDate} onChange={handleEmploymentDateChange}/>
+            <Form.Label htmlFor="employment-date">Employment date</Form.Label>
+          </Floating>
+
+          <Floating className="mb-2">
+            <Form.Control id="firing-date" type="date" placeholder={new Date().toDateString()} min={employmentDate}
+                          value={firingDate} onChange={handleFiringDateChange}/>
+            <Form.Label htmlFor="firing-date">Firing date</Form.Label>
+          </Floating>
         </Form>
       </Modal.Body>
       <Modal.Footer>
