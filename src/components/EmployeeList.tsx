@@ -26,7 +26,7 @@ export function EmployeeList (props: {
         return (
           <tr key={e.id}>
             <td>{e.firstName}</td>
-            <td>{e.middleName ?? '-'}</td>
+            <td>{e.middleName !== '' ? e.middleName : '-'}</td>
             <td>{e.secondName}</td>
             <td>{e.position}</td>
             <td>{e.birthday.toLocaleDateString()}</td>
@@ -34,7 +34,7 @@ export function EmployeeList (props: {
             <td>{e.employmentDate.toLocaleDateString()}</td>
             <td>{e.firingDate?.toLocaleDateString() ?? '-'}</td>
             <td>{e.hasDrivingLicense ? 'yes' : 'no'}</td>
-            <td>{e.colleagues.length}</td>
+            <td>{e.colleagues.length} persons</td>
           </tr>
         )
       })}
