@@ -7,44 +7,7 @@ import Container from 'react-bootstrap/Container'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import { Floating } from './Floating'
-import AsyncCreatableSelect from 'react-select/async-creatable'
-import { OptionsType } from 'react-select'
-
-const loadOptions = async (filter: string) => {
-  const url = `https://api.hh.ru/vacancies?text="${filter}"`
-  const result = await fetch(url)
-  if (!result.ok) {
-    return []
-  }
-
-  const json = await result.json()
-  const names: string[] = json.items
-    .map((item: { name: string }) => item.name)
-
-  const unique: string[] = []
-  names.forEach(name => {
-    if (unique.indexOf(name) === -1) {
-      unique.push(name)
-    }
-  })
-
-  return unique.map(name => ({
-    value: name,
-    label: name
-  }))
-}
-
-const PositionsSelector = (props: {
-  onChange: (value: string) => void
-}) => {
-  const handleChange = (e: { value: string } | OptionsType<{ value: string }> | null) => {
-    if (e && 'value' in e) {
-      props.onChange(e.value)
-    }
-  }
-
-  return <AsyncCreatableSelect cacheOptions loadOptions={loadOptions} onChange={handleChange}/>
-}
+import { PositionsSelector } from './PositionSelector'
 
 export function EmployeeForm (props: {
   positions: Position[]
@@ -96,23 +59,23 @@ export function EmployeeForm (props: {
     setValidated(true)
   }
 
-  const handleChange = (event: ChangeEvent, f: (value: string) => void) => {
+  const handleInput = (event: ChangeEvent, f: (value: string) => void) => {
     const input = event.target as HTMLInputElement
     f(input.value)
   }
 
-  const handleFirstName = (e: ChangeEvent) => handleChange(e, setFirstName)
-  const handleMiddleName = (e: ChangeEvent) => handleChange(e, setMiddleName)
-  const handleSecondName = (e: ChangeEvent) => handleChange(e, setSecondName)
+  const handleFirstName = (e: ChangeEvent) => handleInput(e, setFirstName)
+  const handleMiddleName = (e: ChangeEvent) => handleInput(e, setMiddleName)
+  const handleSecondName = (e: ChangeEvent) => handleInput(e, setSecondName)
 
-  const handleBirthday = (e: ChangeEvent) => handleChange(e, setBirthday)
+  const handleBirthday = (e: ChangeEvent) => handleInput(e, setBirthday)
   const handleDrivingLicense = (event: ChangeEvent) => {
     const input = event.target as HTMLInputElement
     setHasDrivingLicense(input.checked)
   }
 
-  const handleEmploymentDateChange = (e: ChangeEvent) => handleChange(e, setEmploymentDate)
-  const handleFiringDateChange = (e: ChangeEvent) => handleChange(e, setFiringDate)
+  const handleEmploymentDateChange = (e: ChangeEvent) => handleInput(e, setEmploymentDate)
+  const handleFiringDateChange = (e: ChangeEvent) => handleInput(e, setFiringDate)
 
   return (
     <Modal show={props.show} onHide={props.hideForm}>
