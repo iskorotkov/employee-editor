@@ -1,5 +1,5 @@
 import Form from 'react-bootstrap/Form'
-import React from 'react'
+import React, { FormEvent, useState } from 'react'
 import { Employee, Position } from '../data/employee'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -13,10 +13,12 @@ const FloatingInput = (props: {
   label: string
   placeholder: string
   defaultValue?: string | string[] | number
+  required?: boolean
 }) => {
   return (
     <div className="form-floating mb-2">
-      <Form.Control value={props.defaultValue} id={props.id} type={props.type} placeholder={props.placeholder}/>
+      <Form.Control value={props.defaultValue} id={props.id} type={props.type}
+                    placeholder={props.placeholder} required={props.required}/>
       <Form.Label htmlFor={props.id}>{props.label}</Form.Label>
     </div>
   )
@@ -26,21 +28,36 @@ export function EmployeeForm (props: {
   positions: Position[]
   colleagues: Employee[]
   show: boolean
-  onHide: () => void
+  hideForm: () => void
   employee?: Employee
 }) {
+  const [validated, setValidated] = useState(false)
+
+  const handleSubmit = (event: FormEvent) => {
+    const form = event.currentTarget
+    // @ts-ignore
+    if (form.checkValidity()) {
+      props.hideForm()
+    } else {
+      event.preventDefault()
+      event.stopPropagation()
+    }
+
+    setValidated(true)
+  }
+
   return (
-    <Modal show={props.show} onHide={props.onHide}>
+    <Modal show={props.show} onHide={props.hideForm}>
       <Modal.Header>
-        <Modal.Title className='px-3'>Add new employee</Modal.Title>
+        <Modal.Title className="px-3">Add new employee</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form>
+        <Form id="employee-form" noValidate validated={validated} onSubmit={handleSubmit} onReset={props.hideForm}>
           <Form.Label>Personal info</Form.Label>
-          <FloatingInput id="first-name" type="text" label="First name" placeholder="Ivan"/>
+          <FloatingInput id="first-name" type="text" label="First name" placeholder="Ivan" required/>
           <FloatingInput id="middle-name" type="text" label="Middle name" placeholder="Ivanovich"/>
-          <FloatingInput id="second-name" type="text" label="Second name" placeholder="Ivanov"/>
-          <FloatingInput id="birthday" type="date" label="Birthday" placeholder={new Date().toDateString()}/>
+          <FloatingInput id="second-name" type="text" label="Second name" placeholder="Ivanov" required/>
+          <FloatingInput id="birthday" type="date" label="Birthday" placeholder={new Date().toDateString()} required/>
 
           <Container fluid>
             <Row className="mt-3">
@@ -67,14 +84,15 @@ export function EmployeeForm (props: {
           </Container>
 
           <Form.Label className="mt-3">Employment</Form.Label>
-          <FloatingInput id="position" type="text" label="Position" placeholder="Developer"/>
-          <FloatingInput id="employment-date" type="date" label="Employment date" placeholder={new Date().toDateString()}/>
+          <FloatingInput id="position" type="text" label="Position" placeholder="Developer" required/>
+          <FloatingInput id="employment-date" type="date" label="Employment date"
+                         placeholder={new Date().toDateString()} required/>
           <FloatingInput id="firing-date" type="date" label="Firing date" placeholder={new Date().toDateString()}/>
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" type="cancel" onClick={props.onHide}>Close</Button>
-        <Button variant="primary" type="submit" onClick={props.onHide}>Save changes</Button>
+        <Button form="employee-form" variant="secondary" type="reset">Close</Button>
+        <Button form="employee-form" variant="primary" type="submit">Save changes</Button>
       </Modal.Footer>
     </Modal>
   )

@@ -51,7 +51,7 @@ function App () {
       </header>
       <main>
         <EmployeeList employees={employees}/>
-        <EmployeeForm positions={[]} colleagues={employees} show={show} onHide={handleClose}/>
+        <EmployeeForm positions={[]} colleagues={employees} show={show} hideForm={handleClose}/>
       </main>
     </div>
   )
