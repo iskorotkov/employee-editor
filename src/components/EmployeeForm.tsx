@@ -1,6 +1,6 @@
 import Form from 'react-bootstrap/Form'
 import React, { ChangeEvent, FormEvent, useState } from 'react'
-import { Employee, Gender, Position } from '../data/employee'
+import { Employee, Gender } from '../data/employee'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Container from 'react-bootstrap/Container'
@@ -11,9 +11,7 @@ import { PositionsSelector } from './PositionSelector'
 
 export function EmployeeForm (props: {
   title: string
-  positions: Position[]
   colleagues: Employee[]
-  show: boolean
   hideForm: () => void
   onApply: (employee: Employee) => void
   employee?: Employee
@@ -81,7 +79,7 @@ export function EmployeeForm (props: {
   const handleFiringDateChange = (e: ChangeEvent) => handleInput(e, setFiringDate)
 
   return (
-    <Modal show={props.show} onHide={props.hideForm}>
+    <Modal show={true} onHide={props.hideForm}>
       <Modal.Header>
         <Modal.Title className="px-3">{props.title}</Modal.Title>
       </Modal.Header>

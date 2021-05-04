@@ -31,14 +31,13 @@ function App () {
         <EmployeeList employees={employees} onSelect={setSelectedEmployee}/>
 
         {show
-          ? <EmployeeForm title="Add new employee" positions={[]} colleagues={employees}
-                          show={show} hideForm={handleCloseCreateForm} onApply={e => repo.add(e)}/>
+          ? <EmployeeForm title="Add new employee" colleagues={employees}
+                          hideForm={handleCloseCreateForm} onApply={e => repo.add(e)}/>
           : false}
 
         {selectedEmployee
-          ? <EmployeeForm title="Edit employee" employee={selectedEmployee ?? undefined} positions={[]}
-                          colleagues={employees}
-                          show={true} hideForm={handleCloseEditForm} onApply={e => repo.update(e)}/>
+          ? <EmployeeForm title="Edit employee" employee={selectedEmployee ?? undefined} colleagues={employees}
+                          hideForm={handleCloseEditForm} onApply={e => repo.update(e)}/>
           : null}
       </main>
     </div>
