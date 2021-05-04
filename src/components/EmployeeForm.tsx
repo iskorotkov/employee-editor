@@ -38,8 +38,9 @@ export function EmployeeForm (props: {
   const [tags, setTags] = useState(props.employee?.tags ?? [])
 
   const handleSubmit = (event: FormEvent) => {
-    const form = event.currentTarget as unknown as { checkValidity: () => boolean }
+    event.preventDefault()
 
+    const form = event.currentTarget as unknown as { checkValidity: () => boolean }
     if (form.checkValidity() && position) {
       const employee = {
         id: props.employee?.id ?? 0,
@@ -59,7 +60,6 @@ export function EmployeeForm (props: {
       props.onApply(employee)
       props.hideForm()
     } else {
-      event.preventDefault()
       event.stopPropagation()
     }
 
