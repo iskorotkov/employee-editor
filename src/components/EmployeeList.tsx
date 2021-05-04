@@ -14,13 +14,16 @@ export function EmployeeList (props: {
         <th>First name</th>
         <th>Middle name</th>
         <th>Second name</th>
-        <th>Position</th>
         <th>Birthday</th>
         <th>Gender</th>
+        <th>Driving license</th>
+
+        <th>Position</th>
         <th>Employment date</th>
         <th>Firing date</th>
-        <th>Driving license</th>
         <th>Colleagues</th>
+
+        <th>Tags</th>
       </tr>
       </thead>
       <tbody className="align-middle">
@@ -30,13 +33,16 @@ export function EmployeeList (props: {
             <td>{e.firstName}</td>
             <td>{e.middleName !== '' ? e.middleName : '-'}</td>
             <td>{e.secondName}</td>
-            <td>{e.position}</td>
             <td>{e.birthday.toLocaleDateString()}</td>
             <td>{e.gender}</td>
+            <td>{e.hasDrivingLicense ? 'yes' : 'no'}</td>
+
+            <td>{e.position}</td>
             <td>{e.employmentDate.toLocaleDateString()}</td>
             <td>{e.firingDate?.toLocaleDateString() ?? '-'}</td>
-            <td>{e.hasDrivingLicense ? 'yes' : 'no'}</td>
             <td>{e.colleagues.length}</td>
+
+            <td>{e.tags.length}</td>
           </tr>
         )
       })}
