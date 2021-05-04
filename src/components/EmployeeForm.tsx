@@ -10,6 +10,7 @@ import { Floating } from './Floating'
 import { PositionsSelector } from './PositionSelector'
 
 export function EmployeeForm (props: {
+  title: string
   positions: Position[]
   colleagues: Employee[]
   show: boolean
@@ -80,7 +81,7 @@ export function EmployeeForm (props: {
   return (
     <Modal show={props.show} onHide={props.hideForm}>
       <Modal.Header>
-        <Modal.Title className="px-3">Add new employee</Modal.Title>
+        <Modal.Title className="px-3">{props.title}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form id="employee-form" noValidate validated={validated} onSubmit={handleSubmit} onReset={props.hideForm}>

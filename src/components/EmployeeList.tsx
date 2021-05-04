@@ -1,9 +1,11 @@
 import { Employee } from '../data/employee'
 import Table from 'react-bootstrap/Table'
 import React from 'react'
+import './EmployeeList.css'
 
 export function EmployeeList (props: {
   employees: Employee[]
+  onSelect: (selected: Employee) => void
 }) {
   return (
     <Table hover responsive>
@@ -24,7 +26,7 @@ export function EmployeeList (props: {
       <tbody className="align-middle">
       {props.employees.map(e => {
         return (
-          <tr key={e.id}>
+          <tr key={e.id} className="cursor-pointer" onClick={() => props.onSelect(e)}>
             <td>{e.firstName}</td>
             <td>{e.middleName !== '' ? e.middleName : '-'}</td>
             <td>{e.secondName}</td>

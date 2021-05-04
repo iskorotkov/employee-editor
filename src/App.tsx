@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import './App.css'
 import { EmployeeList } from './components/EmployeeList'
-import { EmployeeRepo } from './data/employee'
+import { Employee, EmployeeRepo } from './data/employee'
 import Button from 'react-bootstrap/Button'
 import { EmployeeForm } from './components/EmployeeForm'
 import { LocalEmployeeRepo } from './localStorage/localEmployeeRepo'
@@ -12,8 +12,11 @@ function App () {
 
   const [show, setShow] = useState(false)
 
-  const handleShow = () => setShow(true)
-  const handleClose = () => setShow(false)
+  const handleShowCreateForm = () => setShow(true)
+  const handleCloseCreateForm = () => setShow(false)
+  const handleCloseEditForm = () => setSelectedEmployee(null)
+
+  const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null)
 
   return (
     <div className="App">
@@ -21,13 +24,17 @@ function App () {
         <div className="d-flex flex-row flex-nowrap mx-2 p-3 align-items-center">
           <h2 className="text-white p-0 m-0">Employee Editor</h2>
           <span className="flex-grow-1"/>
-          <Button variant="success" onClick={handleShow}>Add new employee</Button>
+          <Button variant="success" onClick={handleShowCreateForm}>Add new employee</Button>
         </div>
       </header>
       <main>
-        <EmployeeList employees={employees}/>
-        <EmployeeForm positions={[]} colleagues={employees} show={show} hideForm={handleClose}
-                      onApply={e => repo.add(e)}/>
+        <EmployeeList employees={employees} onSelect={setSelectedEmployee}/>
+
+        <EmployeeForm title="Add new employee" positions={[]} colleagues={employees}
+                      show={show} hideForm={handleCloseCreateForm} onApply={e => repo.add(e)}/>
+
+        <EmployeeForm title="Edit employee" employee={selectedEmployee!} positions={[]} colleagues={employees}
+                      show={selectedEmployee != null} hideForm={handleCloseEditForm} onApply={e => repo.update(e)}/>
       </main>
     </div>
   )
