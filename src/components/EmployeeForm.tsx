@@ -20,17 +20,19 @@ export function EmployeeForm (props: {
 }) {
   const [validated, setValidated] = useState(false)
 
-  const [firstName, setFirstName] = useState('')
-  const [secondName, setSecondName] = useState('')
-  const [middleName, setMiddleName] = useState('')
+  const [firstName, setFirstName] = useState(props.employee?.firstName ?? '')
+  const [middleName, setMiddleName] = useState(props.employee?.middleName ?? '')
+  const [secondName, setSecondName] = useState(props.employee?.secondName ?? '')
 
-  const [birthday, setBirthday] = useState('')
-  const [gender, setGender] = useState(Gender.male)
-  const [hasDrivingLicense, setHasDrivingLicense] = useState(false)
+  const toISODate = (d: Date | null | undefined) => d ? d.toISOString().slice(0, 10) : ''
 
-  const [position, setPosition] = useState('')
-  const [employmentDate, setEmploymentDate] = useState('')
-  const [firingDate, setFiringDate] = useState('')
+  const [birthday, setBirthday] = useState(toISODate(props.employee?.birthday))
+  const [gender, setGender] = useState(props.employee?.gender ?? Gender.male)
+  const [hasDrivingLicense, setHasDrivingLicense] = useState(props.employee?.hasDrivingLicense ?? false)
+
+  const [position, setPosition] = useState(props.employee?.position ?? '')
+  const [employmentDate, setEmploymentDate] = useState(toISODate(props.employee?.employmentDate))
+  const [firingDate, setFiringDate] = useState(toISODate(props.employee?.firingDate))
 
   const handleSubmit = (event: FormEvent) => {
     const form = event.currentTarget as unknown as { checkValidity: () => boolean }
@@ -141,7 +143,8 @@ export function EmployeeForm (props: {
           <Form.Label className="mt-3">Employment</Form.Label>
 
           <Floating className="mb-2">
-            <PositionsSelector validated={validated} onChange={setPosition}/>
+            <PositionsSelector value={{ value: position, label: position }} validated={validated}
+                               onChange={setPosition}/>
           </Floating>
 
           <Floating className="mb-2">
