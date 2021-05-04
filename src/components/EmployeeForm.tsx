@@ -39,16 +39,16 @@ export function EmployeeForm (props: {
   const handleSubmit = (event: FormEvent) => {
     const form = event.currentTarget as unknown as { checkValidity: () => boolean }
 
-    if (form.checkValidity() && position !== '') {
+    if (form.checkValidity() && position) {
       const employee = {
         id: props.employee?.id ?? 0,
-        firstName: firstName!,
-        middleName: middleName!,
-        secondName: secondName!,
+        firstName: firstName ?? '',
+        middleName: middleName ?? '',
+        secondName: secondName ?? '',
         birthday: new Date(birthday ?? ''),
         gender,
         hasDrivingLicense,
-        position: position!,
+        position: position ?? '',
         employmentDate: new Date(employmentDate ?? ''),
         firingDate: new Date(firingDate ?? ''),
         colleagues: colleagues ?? []
