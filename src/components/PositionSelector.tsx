@@ -1,6 +1,7 @@
 import { OptionsType } from 'react-select'
 import AsyncCreatableSelect from 'react-select/async-creatable'
 import React from 'react'
+import { mustNotBeEmpty } from '../styles/validation'
 
 const loadOptions = async (filter: string) => {
   const url = `https://api.hh.ru/vacancies?text="${filter}"`
@@ -26,24 +27,8 @@ const loadOptions = async (filter: string) => {
   }))
 }
 
-const invalidStyle = (provided: any) => {
-  return {
-    ...provided,
-    border: '1px solid #dc3545 !important',
-    borderRadius: '5px'
-  }
-}
-
-const validStyle = (provided: any) => {
-  return {
-    ...provided,
-    border: '1px solid #198754 !important',
-    borderRadius: '4px'
-  }
-}
-
 export const PositionsSelector = (props: {
-  value: { value: string, label: string }
+  value: string | undefined
   validated: boolean
   onChange: (value: string) => void
 }) => {
@@ -53,12 +38,13 @@ export const PositionsSelector = (props: {
     }
   }
 
-  const customStyle = (provided: any, state: any) => {
-    return !props.validated
-      ? provided
-      : state.hasValue ? validStyle(provided) : invalidStyle(provided)
-  }
+  const customStyle = (provided: any, state: any) => mustNotBeEmpty(props.validated, provided, state)
 
-  return <AsyncCreatableSelect cacheOptions styles={{ container: customStyle }} value={props.value}
+  const value = props.value
+    ? { value: props.value, label: props.value }
+    : undefined
+
+  return <AsyncCreatableSelect cacheOptions styles={{ container: customStyle }} value={value}
+                               placeholder="Position"
                                loadOptions={loadOptions} onChange={handleChange}/>
 }

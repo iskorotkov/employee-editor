@@ -8,10 +8,11 @@ import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import { Floating } from './Floating'
 import { PositionsSelector } from './PositionSelector'
+import { ColleaguesSelector } from './ColleaguesSelector'
 
 export function EmployeeForm (props: {
   title: string
-  colleagues: Employee[]
+  others: Employee[]
   hideForm: () => void
   onApply: (employee: Employee) => void
   onDelete?: (employee: Employee) => void
@@ -19,36 +20,38 @@ export function EmployeeForm (props: {
 }) {
   const [validated, setValidated] = useState(false)
 
-  const [firstName, setFirstName] = useState(props.employee?.firstName ?? '')
-  const [middleName, setMiddleName] = useState(props.employee?.middleName ?? '')
-  const [secondName, setSecondName] = useState(props.employee?.secondName ?? '')
+  const [firstName, setFirstName] = useState(props.employee?.firstName)
+  const [middleName, setMiddleName] = useState(props.employee?.middleName ?? undefined)
+  const [secondName, setSecondName] = useState(props.employee?.secondName)
 
-  const toISODate = (d: Date | null | undefined) => d ? d.toISOString().slice(0, 10) : ''
+  const toISODate = (d: Date | null | undefined) => d?.toISOString().slice(0, 10)
 
   const [birthday, setBirthday] = useState(toISODate(props.employee?.birthday))
   const [gender, setGender] = useState(props.employee?.gender ?? Gender.male)
   const [hasDrivingLicense, setHasDrivingLicense] = useState(props.employee?.hasDrivingLicense ?? false)
 
-  const [position, setPosition] = useState(props.employee?.position ?? '')
+  const [position, setPosition] = useState(props.employee?.position)
   const [employmentDate, setEmploymentDate] = useState(toISODate(props.employee?.employmentDate))
   const [firingDate, setFiringDate] = useState(toISODate(props.employee?.firingDate))
+
+  const [colleagues, setColleagues] = useState(props.employee?.colleagues)
 
   const handleSubmit = (event: FormEvent) => {
     const form = event.currentTarget as unknown as { checkValidity: () => boolean }
 
     if (form.checkValidity() && position !== '') {
       const employee = {
-        id: 0,
-        firstName,
-        middleName,
-        secondName,
-        birthday: new Date(birthday),
+        id: props.employee?.id ?? 0,
+        firstName: firstName!,
+        middleName: middleName!,
+        secondName: secondName!,
+        birthday: new Date(birthday ?? ''),
         gender,
         hasDrivingLicense,
-        position,
-        employmentDate: new Date(employmentDate),
-        firingDate: new Date(firingDate),
-        colleagues: []
+        position: position!,
+        employmentDate: new Date(employmentDate ?? ''),
+        firingDate: new Date(firingDate ?? ''),
+        colleagues: colleagues ?? []
       }
 
       props.onApply(employee)
@@ -148,7 +151,7 @@ export function EmployeeForm (props: {
           <Form.Label className="mt-3">Employment</Form.Label>
 
           <Floating className="mb-2">
-            <PositionsSelector value={{ value: position, label: position }} validated={validated}
+            <PositionsSelector value={position} validated={validated}
                                onChange={setPosition}/>
           </Floating>
 
@@ -163,6 +166,9 @@ export function EmployeeForm (props: {
                           value={firingDate} onChange={handleFiringDateChange}/>
             <Form.Label htmlFor="firing-date">Firing date</Form.Label>
           </Floating>
+
+          <ColleaguesSelector value={colleagues} options={props.others} validated={validated}
+                              onChange={setColleagues}/>
         </Form>
       </Modal.Body>
       <Modal.Footer>

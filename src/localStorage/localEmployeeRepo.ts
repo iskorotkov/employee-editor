@@ -26,7 +26,7 @@ export class LocalEmployeeRepo implements EmployeeRepo {
       position: data.position,
       employmentDate: new Date(data.employmentDate),
       firingDate: data.firingDate ? new Date(data.firingDate) : null,
-      colleagues: []
+      colleagues: data.colleagues
     }
   }
 

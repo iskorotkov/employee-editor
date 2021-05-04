@@ -1,24 +1,20 @@
-export type ID = number
-
-export type Position = string
-
 export enum Gender {
   male = 'male',
   female = 'female'
 }
 
 export interface Employee {
-  id: ID
+  id: number
   firstName: string
   secondName: string
   middleName: string | null
-  position: Position
+  position: string
   birthday: Date
   gender: Gender
   employmentDate: Date
   firingDate: Date | null
   hasDrivingLicense: boolean
-  colleagues: Employee[]
+  colleagues: number[]
 }
 
 export interface EmployeeRepo {
