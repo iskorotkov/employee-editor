@@ -40,6 +40,7 @@ export function TagInput (props: {
   return (
     <Card>
       <Card.Header>
+        <Card.Subtitle className="d-inline">Tag: {name}</Card.Subtitle>
         <Button variant="close" className="float-end" onClick={handleRemoveClick}/>
       </Card.Header>
       <Card.Body>

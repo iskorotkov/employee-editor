@@ -10,6 +10,7 @@ import { Floating } from './Floating'
 import { PositionsSelector } from './PositionSelector'
 import { ColleaguesSelector } from './ColleaguesSelector'
 import { TagsList } from './TagsList'
+import { toISODate } from '../formatting/toISODate'
 
 export function EmployeeForm (props: {
   title: string
@@ -24,8 +25,6 @@ export function EmployeeForm (props: {
   const [firstName, setFirstName] = useState(props.employee?.firstName ?? '')
   const [middleName, setMiddleName] = useState(props.employee?.middleName ?? '')
   const [secondName, setSecondName] = useState(props.employee?.secondName ?? '')
-
-  const toISODate = (d: Date | null | undefined) => d?.toISOString().slice(0, 10) ?? ''
 
   const [birthday, setBirthday] = useState(toISODate(props.employee?.birthday))
   const [gender, setGender] = useState(props.employee?.gender ?? Gender.male)
@@ -67,23 +66,18 @@ export function EmployeeForm (props: {
     setValidated(true)
   }
 
-  const handleInput = (event: ChangeEvent, f: (value: string) => void) => {
-    const input = event.target as HTMLInputElement
-    f(input.value)
-  }
-
+  const handleInput = (event: ChangeEvent, f: (value: string) => void) => f((event.target as HTMLInputElement).value)
   const handleFirstName = (e: ChangeEvent) => handleInput(e, setFirstName)
   const handleMiddleName = (e: ChangeEvent) => handleInput(e, setMiddleName)
   const handleSecondName = (e: ChangeEvent) => handleInput(e, setSecondName)
-
   const handleBirthday = (e: ChangeEvent) => handleInput(e, setBirthday)
+  const handleEmploymentDateChange = (e: ChangeEvent) => handleInput(e, setEmploymentDate)
+  const handleFiringDateChange = (e: ChangeEvent) => handleInput(e, setFiringDate)
+
   const handleDrivingLicense = (event: ChangeEvent) => {
     const input = event.target as HTMLInputElement
     setHasDrivingLicense(input.checked)
   }
-
-  const handleEmploymentDateChange = (e: ChangeEvent) => handleInput(e, setEmploymentDate)
-  const handleFiringDateChange = (e: ChangeEvent) => handleInput(e, setFiringDate)
 
   const handleDelete = () => {
     if (props.onDelete && props.employee) {
@@ -183,9 +177,7 @@ export function EmployeeForm (props: {
           : null}
 
         <div className="flex-grow-1"/>
-
         <Button form="employee-form" variant="secondary" type="reset">Close</Button>
-
         <Button form="employee-form" variant="success" type="submit">Save changes</Button>
       </Modal.Footer>
     </Modal>

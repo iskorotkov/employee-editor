@@ -13,39 +13,37 @@ export function TagsList (props: {
   const [tags, setTags] = useState(props.value ?? [])
 
   const handleChange = (tag: Tag) => {
-    const copy = tags.slice()
-    const index = copy.findIndex(t => t.id === tag.id)
+    const index = tags.findIndex(t => t.id === tag.id)
     if (index === -1) {
       return
     }
 
-    copy[index] = tag
+    const copy = [...tags.slice(0, index), tag, ...tags.slice(index + 1)]
 
     setTags(copy)
     props.onChange(copy)
   }
 
   const handleRemove = (tag: Tag) => {
-    const copy = tags.slice()
-    const index = copy.findIndex(t => t.id === tag.id)
+    const index = tags.findIndex(t => t.id === tag.id)
     if (index === -1) {
       return
     }
 
-    copy.splice(index, 1)
+    const copy = [...tags.slice(0, index), ...tags.slice(index + 1)]
 
     setTags(copy)
     props.onChange(copy)
   }
 
   const handleAdd = () => {
-    const copy = tags.slice()
-    copy.push({
+    const item = {
       id: Math.floor(Math.random() * Number.MAX_SAFE_INTEGER),
       name: '',
       type: 'text',
       value: ''
-    })
+    }
+    const copy = [...tags.slice(), item]
 
     setTags(copy)
     props.onChange(copy)
@@ -61,8 +59,8 @@ export function TagsList (props: {
 
       <Row className="row-cols-1 row-cols-md-2 mt-1 g-3">
         {tags.map(tag =>
-          <Col className="mt-3">
-            <TagInput key={tag.id} idPrefix={tag.id.toString()} value={tag}
+          <Col key={tag.id} className="mt-3">
+            <TagInput idPrefix={tag.id.toString()} value={tag}
                       onChange={handleChange} onRemove={handleRemove}/>
           </Col>
         )}
