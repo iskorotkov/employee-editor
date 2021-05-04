@@ -3,6 +3,13 @@ export enum Gender {
   female = 'female'
 }
 
+export interface Tag {
+  id: number
+  name: string
+  type: string
+  value: string
+}
+
 export interface Employee {
   id: number
   firstName: string
@@ -15,6 +22,7 @@ export interface Employee {
   firingDate: Date | null
   hasDrivingLicense: boolean
   colleagues: number[]
+  tags: Tag[]
 }
 
 export interface EmployeeRepo {

@@ -9,6 +9,7 @@ import Button from 'react-bootstrap/Button'
 import { Floating } from './Floating'
 import { PositionsSelector } from './PositionSelector'
 import { ColleaguesSelector } from './ColleaguesSelector'
+import { TagsList } from './TagsList'
 
 export function EmployeeForm (props: {
   title: string
@@ -35,6 +36,7 @@ export function EmployeeForm (props: {
   const [firingDate, setFiringDate] = useState(toISODate(props.employee?.firingDate))
 
   const [colleagues, setColleagues] = useState(props.employee?.colleagues)
+  const [tags, setTags] = useState(props.employee?.tags)
 
   const handleSubmit = (event: FormEvent) => {
     const form = event.currentTarget as unknown as { checkValidity: () => boolean }
@@ -51,7 +53,8 @@ export function EmployeeForm (props: {
         position: position ?? '',
         employmentDate: new Date(employmentDate ?? ''),
         firingDate: new Date(firingDate ?? ''),
-        colleagues: colleagues ?? []
+        colleagues: colleagues ?? [],
+        tags: tags ?? []
       }
 
       props.onApply(employee)
@@ -98,25 +101,25 @@ export function EmployeeForm (props: {
           <Form.Label>Personal info</Form.Label>
 
           <Floating className="mb-2">
-            <Form.Control id="first-name" type="text" placeholder="Ivan" required
+            <Form.Control id="first-name" type="text" placeholder="" required
                           value={firstName} onChange={handleFirstName}/>
             <Form.Label htmlFor="first-name">First name</Form.Label>
           </Floating>
 
           <Floating className="mb-2">
-            <Form.Control id="middle-name" type="text" placeholder="Ivanovich"
+            <Form.Control id="middle-name" type="text" placeholder=""
                           value={middleName} onChange={handleMiddleName}/>
             <Form.Label htmlFor="middle-name">Middle name</Form.Label>
           </Floating>
 
           <Floating className="mb-2">
-            <Form.Control id="second-name" type="text" placeholder="Ivanov" required
+            <Form.Control id="second-name" type="text" placeholder="" required
                           value={secondName} onChange={handleSecondName}/>
             <Form.Label htmlFor="second-name">Second name</Form.Label>
           </Floating>
 
           <Floating className="mb-2">
-            <Form.Control id="birthday" type="date" placeholder={new Date().toDateString()} required
+            <Form.Control id="birthday" type="date" placeholder="" required
                           value={birthday} onChange={handleBirthday}/>
             <Form.Label htmlFor="birthday">Birthday</Form.Label>
           </Floating>
@@ -148,7 +151,7 @@ export function EmployeeForm (props: {
             </Form.Check>
           </Container>
 
-          <Form.Label className="mt-3">Employment</Form.Label>
+          <Form.Label className="mt-4">Employment</Form.Label>
 
           <Floating className="mb-2">
             <PositionsSelector value={position} validated={validated}
@@ -156,19 +159,21 @@ export function EmployeeForm (props: {
           </Floating>
 
           <Floating className="mb-2">
-            <Form.Control id="employment-date" type="date" placeholder={new Date().toDateString()} required
+            <Form.Control id="employment-date" type="date" placeholder="" required
                           value={employmentDate} onChange={handleEmploymentDateChange}/>
             <Form.Label htmlFor="employment-date">Employment date</Form.Label>
           </Floating>
 
           <Floating className="mb-2">
-            <Form.Control id="firing-date" type="date" placeholder={new Date().toDateString()} min={employmentDate}
+            <Form.Control id="firing-date" type="date" placeholder="" min={employmentDate}
                           value={firingDate} onChange={handleFiringDateChange}/>
             <Form.Label htmlFor="firing-date">Firing date</Form.Label>
           </Floating>
 
           <ColleaguesSelector value={colleagues} options={props.others} validated={validated}
                               onChange={setColleagues}/>
+
+          <TagsList value={tags} onChange={setTags}/>
         </Form>
       </Modal.Body>
       <Modal.Footer>

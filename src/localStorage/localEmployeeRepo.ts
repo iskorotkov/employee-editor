@@ -1,4 +1,4 @@
-import { Employee, EmployeeRepo, Gender } from '../data/employee'
+import { Employee, EmployeeRepo, Gender, Tag } from '../data/employee'
 
 export const localStorageKey = 'currentKey'
 
@@ -14,19 +14,29 @@ export class LocalEmployeeRepo implements EmployeeRepo {
     return newId
   }
 
+  private static toTag (data: any): Tag {
+    return {
+      id: data.id ?? 0,
+      name: data.name ?? '',
+      type: data.type ?? 'text',
+      value: data.value ?? ''
+    }
+  }
+
   private static toEmployee (data: any): Employee {
     return {
-      id: data.id,
-      firstName: data.firstName,
-      middleName: data.middleName,
-      secondName: data.secondName,
+      id: data.id ?? 0,
+      firstName: data.firstName ?? '',
+      middleName: data.middleName ?? '',
+      secondName: data.secondName ?? '',
       birthday: new Date(data.birthday),
-      gender: (Gender as any)[data.gender],
-      hasDrivingLicense: data.hasDrivingLicense,
-      position: data.position,
+      gender: (Gender as any)[data.gender] ?? Gender.male,
+      hasDrivingLicense: data.hasDrivingLicense ?? false,
+      position: data.position ?? '',
       employmentDate: new Date(data.employmentDate),
       firingDate: data.firingDate ? new Date(data.firingDate) : null,
-      colleagues: data.colleagues
+      colleagues: data.colleagues ?? '',
+      tags: data.tags?.map(this.toTag) ?? []
     }
   }
 
