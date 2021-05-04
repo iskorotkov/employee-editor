@@ -32,12 +32,12 @@ function App () {
 
         {show
           ? <EmployeeForm title="Add new employee" colleagues={employees}
-                          hideForm={handleCloseCreateForm} onApply={e => repo.add(e)}/>
+                          hideForm={handleCloseCreateForm} onApply={repo.add}/>
           : false}
 
         {selectedEmployee
           ? <EmployeeForm title="Edit employee" employee={selectedEmployee ?? undefined} colleagues={employees}
-                          hideForm={handleCloseEditForm} onApply={e => repo.update(e)}/>
+                          hideForm={handleCloseEditForm} onApply={repo.update} onDelete={repo.remove}/>
           : null}
       </main>
     </div>

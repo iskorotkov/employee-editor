@@ -14,6 +14,7 @@ export function EmployeeForm (props: {
   colleagues: Employee[]
   hideForm: () => void
   onApply: (employee: Employee) => void
+  onDelete?: (employee: Employee) => void
   employee?: Employee
 }) {
   const [validated, setValidated] = useState(false)
@@ -77,6 +78,12 @@ export function EmployeeForm (props: {
 
   const handleEmploymentDateChange = (e: ChangeEvent) => handleInput(e, setEmploymentDate)
   const handleFiringDateChange = (e: ChangeEvent) => handleInput(e, setFiringDate)
+
+  const handleDelete = () => {
+    if (props.onDelete && props.employee) {
+      props.onDelete(props.employee)
+    }
+  }
 
   return (
     <Modal show={true} onHide={props.hideForm}>
@@ -159,8 +166,16 @@ export function EmployeeForm (props: {
         </Form>
       </Modal.Body>
       <Modal.Footer>
+        {props.onDelete && props.employee
+          ? <Button form="employee-form" variant="danger" type="reset"
+                    onClick={handleDelete}>Delete</Button>
+          : null}
+
+        <div className="flex-grow-1"/>
+
         <Button form="employee-form" variant="secondary" type="reset">Close</Button>
-        <Button form="employee-form" variant="primary" type="submit">Save changes</Button>
+
+        <Button form="employee-form" variant="success" type="submit">Save changes</Button>
       </Modal.Footer>
     </Modal>
   )
