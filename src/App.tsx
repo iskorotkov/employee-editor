@@ -18,6 +18,18 @@ function App () {
 
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null)
 
+  const handleDelete = (toDelete: Employee) => {
+    employees.forEach(e => {
+      const i = e.colleagues.indexOf(toDelete.id)
+      if (i !== -1) {
+        e.colleagues.splice(i, 1)
+        repo.update(e)
+      }
+    })
+
+    repo.remove(toDelete)
+  }
+
   return (
     <div className="App">
       <header className="w-100 p-0 m-0 bg-primary">
@@ -38,7 +50,7 @@ function App () {
         {selectedEmployee
           ? <EmployeeForm title="Edit employee" employee={selectedEmployee ?? undefined}
                           others={employees.filter(e => e.id !== selectedEmployee?.id)}
-                          hideForm={handleCloseEditForm} onApply={repo.update} onDelete={repo.remove}/>
+                          hideForm={handleCloseEditForm} onApply={repo.update} onDelete={handleDelete}/>
           : null}
       </main>
     </div>
