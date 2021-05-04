@@ -7,19 +7,20 @@ Deployed to [Netlify](https://employee-editor.netlify.app/).
 Employee Editor allows you to create, edit and delete info about employees.
 
 - [Employee Editor](#employee-editor)
+  - [Features](#features)
   - [Build](#build)
   - [Run](#run)
   - [Project structure](#project-structure)
 
-Features:
+## Features
 
 - CRUD;
 - persistent storage backed by Local Storage;
 - form validation;
-- loading possible employee positions from hh.ru;
+- loading employee positions from hh.ru;
 - list of employee's colleagues;
 - list of user defined tags for each employee;
-- automated deployment to Netlify;
+- automated deployment to Netlify.
 
 ## Build
 
