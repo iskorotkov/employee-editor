@@ -36,7 +36,7 @@ export function EmployeeList (props: {
             <td>{e.employmentDate.toLocaleDateString()}</td>
             <td>{e.firingDate?.toLocaleDateString() ?? '-'}</td>
             <td>{e.hasDrivingLicense ? 'yes' : 'no'}</td>
-            <td>{e.colleagues.length} persons</td>
+            <td>{e.colleagues.length}</td>
           </tr>
         )
       })}
