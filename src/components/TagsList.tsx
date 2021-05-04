@@ -1,5 +1,5 @@
 import { Tag } from '../data/employee'
-import React, { useState } from 'react'
+import React from 'react'
 import { TagInput } from './TagInput'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
@@ -7,33 +7,23 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 
 export function TagsList (props: {
-  value: Tag[] | undefined,
+  value: Tag[],
   onChange: (tags: Tag[]) => void
 }) {
-  const [tags, setTags] = useState(props.value ?? [])
-
   const handleChange = (tag: Tag) => {
-    const index = tags.findIndex(t => t.id === tag.id)
-    if (index === -1) {
-      return
+    const index = props.value.findIndex(t => t.id === tag.id)
+    if (index !== -1) {
+      const tags = [...props.value.slice(0, index), tag, ...props.value.slice(index + 1)]
+      props.onChange(tags)
     }
-
-    const copy = [...tags.slice(0, index), tag, ...tags.slice(index + 1)]
-
-    setTags(copy)
-    props.onChange(copy)
   }
 
   const handleRemove = (tag: Tag) => {
-    const index = tags.findIndex(t => t.id === tag.id)
-    if (index === -1) {
-      return
+    const index = props.value.findIndex(t => t.id === tag.id)
+    if (index !== -1) {
+      const tags = [...props.value.slice(0, index), ...props.value.slice(index + 1)]
+      props.onChange(tags)
     }
-
-    const copy = [...tags.slice(0, index), ...tags.slice(index + 1)]
-
-    setTags(copy)
-    props.onChange(copy)
   }
 
   const handleAdd = () => {
@@ -43,10 +33,9 @@ export function TagsList (props: {
       type: 'text',
       value: ''
     }
-    const copy = [...tags.slice(), item]
 
-    setTags(copy)
-    props.onChange(copy)
+    const tags = [...props.value.slice(), item]
+    props.onChange(tags)
   }
 
   return (
@@ -58,7 +47,7 @@ export function TagsList (props: {
       </div>
 
       <Row className="row-cols-1 row-cols-md-2 mt-1 g-3">
-        {tags.map(tag =>
+        {props.value.map(tag =>
           <Col key={tag.id} className="mt-3">
             <TagInput idPrefix={tag.id.toString()} value={tag}
                       onChange={handleChange} onRemove={handleRemove}/>

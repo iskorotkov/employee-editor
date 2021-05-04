@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react'
+import React, { ChangeEvent } from 'react'
 import { Floating } from './Floating'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
@@ -9,27 +9,36 @@ const supportedTypes = ['text', 'number', 'tel', 'email', 'color', 'datetime-loc
 
 export function TagInput (props: {
   idPrefix: string
-  value: Tag | undefined
+  value: Tag
   onChange: (tag: Tag) => void
   onRemove: (tag: Tag) => void
 }) {
-  const [name, setName] = useState(props.value?.name)
-  const [type, setType] = useState(props.value?.type ?? supportedTypes[0])
-  const [value, setValue] = useState(props.value?.value)
-
-  const handleChange = (e: ChangeEvent, f: (value: string) => void) => {
-    f((e.target as HTMLInputElement).value)
+  const handleNameChange = (e: ChangeEvent) => {
     props.onChange({
-      id: props.value?.id ?? 0,
-      name: name ?? '',
-      type: type,
-      value: value ?? ''
+      id: props.value.id,
+      name: (e.target as HTMLInputElement).value,
+      type: props.value.type,
+      value: props.value.value
     })
   }
 
-  const handleNameChange = (e: ChangeEvent) => handleChange(e, setName)
-  const handleTypeChange = (e: ChangeEvent) => handleChange(e, setType)
-  const handleValueChange = (e: ChangeEvent) => handleChange(e, setValue)
+  const handleTypeChange = (e: ChangeEvent) => {
+    props.onChange({
+      id: props.value.id,
+      name: props.value.name,
+      type: (e.target as HTMLInputElement).value,
+      value: props.value.value
+    })
+  }
+
+  const handleValueChange = (e: ChangeEvent) => {
+    props.onChange({
+      id: props.value.id,
+      name: props.value.name,
+      type: props.value.type,
+      value: (e.target as HTMLInputElement).value
+    })
+  }
 
   const handleRemoveClick = () => {
     if (props.value) {
@@ -40,18 +49,18 @@ export function TagInput (props: {
   return (
     <Card>
       <Card.Header>
-        <Card.Subtitle className="d-inline">Tag: {name}</Card.Subtitle>
+        <Card.Subtitle className="d-inline">Tag: {props.value.name}</Card.Subtitle>
         <Button variant="close" className="float-end" onClick={handleRemoveClick}/>
       </Card.Header>
       <Card.Body>
         <Floating className="mb-2">
-          <Form.Control id={props.idPrefix + '-tag-name'} type="text" placeholder="" value={name} required
+          <Form.Control id={props.idPrefix + '-tag-name'} type="text" placeholder="" value={props.value.name} required
                         onChange={handleNameChange}/>
           <Form.Label htmlFor={props.idPrefix + '-tag-name'}>Name</Form.Label>
         </Floating>
 
         <Floating className="mb-2">
-          <Form.Control id={props.idPrefix + '-tag-type'} as="select" value={type} required
+          <Form.Control id={props.idPrefix + '-tag-type'} as="select" value={props.value.type} required
                         onChange={handleTypeChange}>
             {supportedTypes.map(t => (
               <option key={t} value={t}>{t}</option>
@@ -61,8 +70,8 @@ export function TagInput (props: {
         </Floating>
 
         <Floating>
-          <Form.Control id={props.idPrefix + '-tag-value'} type={type} placeholder="" value={value} required
-                        onChange={handleValueChange}/>
+          <Form.Control id={props.idPrefix + '-tag-value'} type={props.value.type} placeholder="" required
+                        value={props.value.value} onChange={handleValueChange}/>
           <Form.Label htmlFor={props.idPrefix + '-tag-value'}>Value</Form.Label>
         </Floating>
       </Card.Body>
