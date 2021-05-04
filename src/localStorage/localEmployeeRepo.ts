@@ -59,7 +59,7 @@ export class LocalEmployeeRepo implements EmployeeRepo {
       employees.push(employee)
     }
 
-    return employees
+    return employees.sort((a, b) => a.id - b.id)
   }
 
   remove (e: Employee): void {
