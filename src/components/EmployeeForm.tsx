@@ -140,7 +140,7 @@ export function EmployeeForm (props: {
           <Form.Label className="mt-3">Employment</Form.Label>
 
           <Floating className="mb-2">
-            <PositionsSelector onChange={setPosition}/>
+            <PositionsSelector validated={validated} onChange={setPosition}/>
           </Floating>
 
           <Floating className="mb-2">

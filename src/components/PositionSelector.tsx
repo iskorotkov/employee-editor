@@ -42,17 +42,20 @@ const validStyle = (provided: any) => {
   }
 }
 
-const customStyle = (provided: any, state: any) => {
-  return state.hasValue ? validStyle(provided) : invalidStyle(provided)
-}
-
 export const PositionsSelector = (props: {
+  validated: boolean
   onChange: (value: string) => void
 }) => {
   const handleChange = (e: { value: string } | OptionsType<{ value: string }> | null) => {
     if (e && 'value' in e) {
       props.onChange(e.value)
     }
+  }
+
+  const customStyle = (provided: any, state: any) => {
+    return !props.validated
+      ? provided
+      : state.hasValue ? validStyle(provided) : invalidStyle(provided)
   }
 
   return <AsyncCreatableSelect cacheOptions loadOptions={loadOptions} styles={{ container: customStyle }}
