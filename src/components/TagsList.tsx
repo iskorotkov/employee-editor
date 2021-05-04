@@ -3,6 +3,8 @@ import React, { useState } from 'react'
 import { TagInput } from './TagInput'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 
 export function TagsList (props: {
   value: Tag[] | undefined,
@@ -12,7 +14,6 @@ export function TagsList (props: {
 
   const handleChange = (tag: Tag) => {
     const copy = tags.slice()
-
     const index = copy.findIndex(t => t.id === tag.id)
     if (index === -1) {
       return
@@ -26,7 +27,6 @@ export function TagsList (props: {
 
   const handleRemove = (tag: Tag) => {
     const copy = tags.slice()
-
     const index = copy.findIndex(t => t.id === tag.id)
     if (index === -1) {
       return
@@ -40,7 +40,6 @@ export function TagsList (props: {
 
   const handleAdd = () => {
     const copy = tags.slice()
-
     copy.push({
       id: Math.floor(Math.random() * Number.MAX_SAFE_INTEGER),
       name: '',
@@ -52,20 +51,22 @@ export function TagsList (props: {
     props.onChange(copy)
   }
 
-  return (<>
-    <div className="d-flex flex-nowrap flex-row mt-4 align-items-center">
-      <Form.Label>Tags</Form.Label>
+  return (
+    <>
+      <div className="d-flex flex-nowrap flex-row mt-4 align-items-center">
+        <Form.Label>Tags</Form.Label>
+        <div className="flex-grow-1"/>
+        <Button variant="success" onClick={handleAdd}>+</Button>
+      </div>
 
-      <div className="flex-grow-1"/>
-
-      <Button variant="success" onClick={handleAdd}>+</Button>
-    </div>
-
-    <div className="mt-2">
-      {tags.map(tag =>
-        <TagInput key={tag.id} idPrefix={tag.id.toString()} value={tag}
-                  onChange={handleChange} onRemove={handleRemove}/>
-      )}
-    </div>
-  </>)
+      <Row className="row-cols-1 row-cols-md-2 mt-1 g-3">
+        {tags.map(tag =>
+          <Col className="mt-3">
+            <TagInput key={tag.id} idPrefix={tag.id.toString()} value={tag}
+                      onChange={handleChange} onRemove={handleRemove}/>
+          </Col>
+        )}
+      </Row>
+    </>
+  )
 }
